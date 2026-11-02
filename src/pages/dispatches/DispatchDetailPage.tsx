@@ -698,38 +698,38 @@ export const DispatchDetailPage: React.FC<DispatchDetailPageProps> = ({
         </div>
 
         <div className="overflow-x-auto rounded-xl border border-slate-800/80 scrollbar-thin">
-          <table className="w-full text-left text-xs min-w-[780px] lg:min-w-full">
+          <table className="w-full text-left text-xs min-w-[680px] sm:min-w-[720px] lg:min-w-full">
             <thead className="text-[11px] uppercase tracking-wider text-slate-400 bg-slate-950/40 border-b border-slate-800">
               <tr>
-                <th className="px-3.5 py-3 font-semibold whitespace-nowrap">{t('table.sku', 'SKU')}</th>
-                <th className="px-3.5 py-3 font-semibold whitespace-nowrap">{t('table.item_description', 'Item Description')}</th>
-                <th className="px-3.5 py-3 font-semibold text-right whitespace-nowrap">{t('table.dispatched', 'Dispatched')}</th>
-                <th className="px-3.5 py-3 font-semibold text-right whitespace-nowrap">{t('table.received', 'Received')}</th>
-                <th className="px-3.5 py-3 font-semibold text-right whitespace-nowrap">{t('table.shortfall', 'Shortfall')}</th>
-                <th className="px-3.5 py-3 font-semibold whitespace-nowrap">{t('table.condition', 'Condition')}</th>
-                <th className="px-3.5 py-3 font-semibold whitespace-nowrap">{t('table.discrepancy_category', 'Discrepancy Category')}</th>
-                <th className="px-3.5 py-3 font-semibold whitespace-nowrap">{t('table.notes', 'Notes')}</th>
+                <th className="px-2.5 sm:px-3.5 py-3 font-semibold whitespace-nowrap">{t('table.sku', 'SKU')}</th>
+                <th className="px-2.5 sm:px-3.5 py-3 font-semibold whitespace-nowrap">{t('table.item_description', 'Item Description')}</th>
+                <th className="px-2.5 sm:px-3.5 py-3 font-semibold text-right whitespace-nowrap">{t('table.dispatched', 'Dispatched')}</th>
+                <th className="px-2.5 sm:px-3.5 py-3 font-semibold text-right whitespace-nowrap">{t('table.received', 'Received')}</th>
+                <th className="px-2.5 sm:px-3.5 py-3 font-semibold text-right whitespace-nowrap">{t('table.shortfall', 'Shortfall')}</th>
+                <th className="px-2.5 sm:px-3.5 py-3 font-semibold whitespace-nowrap">{t('table.condition', 'Condition')}</th>
+                <th className="px-2.5 sm:px-3.5 py-3 font-semibold whitespace-nowrap">{t('table.discrepancy_category', 'Discrepancy Category')}</th>
+                <th className="px-2.5 sm:px-3.5 py-3 font-semibold whitespace-nowrap">{t('table.notes', 'Notes')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 font-mono">
               {dispatch.lines.map((line) => (
                 <tr key={line.id} className="hover:bg-slate-800/30">
-                  <td className="px-3.5 py-3 text-slate-400 whitespace-nowrap">{line.sku}</td>
-                  <td className="px-3.5 py-3 font-sans font-medium text-slate-200">{t(line.itemName)}</td>
-                  <td className="px-3.5 py-3 text-right text-slate-200 font-bold whitespace-nowrap">
+                  <td className="px-2.5 sm:px-3.5 py-3 text-slate-400 whitespace-nowrap">{line.sku}</td>
+                  <td className="px-2.5 sm:px-3.5 py-3 font-sans font-medium text-slate-200">{t(line.itemName)}</td>
+                  <td className="px-2.5 sm:px-3.5 py-3 text-right text-slate-200 font-bold whitespace-nowrap">
                     {line.quantitySent} {t('unit.' + line.unit.toLowerCase(), line.unit)}
                   </td>
-                  <td className="px-3.5 py-3 text-right font-bold text-emerald-400 whitespace-nowrap">
+                  <td className="px-2.5 sm:px-3.5 py-3 text-right font-bold text-emerald-400 whitespace-nowrap">
                     {line.quantityReceived !== undefined ? `${line.quantityReceived} ${t('unit.' + line.unit.toLowerCase(), line.unit)}` : '—'}
                   </td>
-                  <td className="px-3.5 py-3 text-right font-bold whitespace-nowrap">
+                  <td className="px-2.5 sm:px-3.5 py-3 text-right font-bold whitespace-nowrap">
                     {line.lossQty && line.lossQty > 0 ? (
                       <span className="text-rose-400">-{line.lossQty} {t('unit.' + line.unit.toLowerCase(), line.unit)}</span>
                     ) : (
                       <span className="text-slate-500">0</span>
                     )}
                   </td>
-                  <td className="px-3.5 py-3 font-sans whitespace-nowrap">
+                  <td className="px-2.5 sm:px-3.5 py-3 font-sans whitespace-nowrap">
                     {line.condition ? (
                       <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
                         line.condition === 'DAMAGED'
@@ -742,7 +742,7 @@ export const DispatchDetailPage: React.FC<DispatchDetailPageProps> = ({
                       '—'
                     )}
                   </td>
-                  <td className="px-3.5 py-3 font-sans whitespace-nowrap">
+                  <td className="px-2.5 sm:px-3.5 py-3 font-sans whitespace-nowrap">
                     {line.discrepancyType && line.discrepancyType !== 'NONE' ? (
                       <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-rose-950 text-rose-300 border border-rose-800">
                         {t('discrepancy.' + line.discrepancyType.toLowerCase(), line.discrepancyType)}
@@ -751,7 +751,7 @@ export const DispatchDetailPage: React.FC<DispatchDetailPageProps> = ({
                       <span className="text-slate-500">—</span>
                     )}
                   </td>
-                  <td className="px-3.5 py-3 font-sans text-slate-400 text-[11px]">{line.notes ? t(line.notes) : '—'}</td>
+                  <td className="px-2.5 sm:px-3.5 py-3 font-sans text-slate-400 text-[11px]">{line.notes ? t(line.notes) : '—'}</td>
                 </tr>
               ))}
             </tbody>

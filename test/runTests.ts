@@ -1102,6 +1102,22 @@ async function runTestSuite() {
     assertEqual(stagingReport.overallStatus, 'READY_FOR_STAGING', 'Diagnostics engine confirms READY_FOR_STAGING');
   });
 
+  await test('Tablet UX & Responsive Stability', 'Tablet Landscape & Portrait Component Structural Contracts', async () => {
+    const fs = await import('fs');
+    const summaryCardsCode = fs.readFileSync('src/components/dispatches/DispatchSummaryCards.tsx', 'utf8');
+    assert(summaryCardsCode.includes('lg:grid-cols-3'), 'Summary cards use lg:grid-cols-3 for balanced 3-col landscape');
+    assert(summaryCardsCode.includes('sm:col-span-2 lg:col-span-1'), 'Card 3 uses sm:col-span-2 lg:col-span-1');
+
+    const detailPageCode = fs.readFileSync('src/pages/dispatches/DispatchDetailPage.tsx', 'utf8');
+    assert(detailPageCode.includes('min-w-[680px] sm:min-w-[720px] lg:min-w-full'), 'Detail page items table has bounded responsive min-width');
+
+    const auditPageCode = fs.readFileSync('src/pages/audit/AuditPage.tsx', 'utf8');
+    assert(auditPageCode.includes('min-w-[720px] sm:min-w-[760px] lg:min-w-full'), 'Audit page table has bounded responsive min-width');
+    
+    const adminPageCode = fs.readFileSync('src/pages/dashboards/SuperAdminDashboard.tsx', 'utf8');
+    assert(adminPageCode.includes('min-w-[700px] sm:min-w-[740px] lg:min-w-full'), 'Super Admin users table has bounded responsive min-width');
+  });
+
   // -------------------------------------------------------------------------
   // 6. Identity, Fayda e-ID, OTP & Admin Governance Acceptance Tests
   // -------------------------------------------------------------------------

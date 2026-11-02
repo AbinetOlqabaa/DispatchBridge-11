@@ -560,16 +560,16 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({ onNavi
 
           {/* User Accounts Table */}
           <div className="overflow-x-auto rounded-xl border border-slate-800/80 scrollbar-thin">
-            <table className="w-full text-left text-xs min-w-[760px] lg:min-w-full">
+            <table className="w-full text-left text-xs min-w-[700px] sm:min-w-[740px] lg:min-w-full">
               <thead className="text-[11px] uppercase tracking-wider text-slate-400 bg-slate-950/60 border-b border-slate-800">
                 <tr>
-                  <th className="px-3 sm:px-4 py-3 font-semibold">{t('admin.col_user', 'User')}</th>
-                  <th className="px-3 sm:px-4 py-3 font-semibold">{t('admin.col_phone', 'Verified Phone')}</th>
-                  <th className="px-3 sm:px-4 py-3 font-semibold">{t('admin.col_fayda', 'Fayda e-ID (Masked)')}</th>
-                  <th className="px-3 sm:px-4 py-3 font-semibold">{t('admin.col_business', 'Business Entity')}</th>
-                  <th className="px-3 sm:px-4 py-3 font-semibold">{t('admin.col_role', 'Assigned Role')}</th>
-                  <th className="px-3 sm:px-4 py-3 font-semibold">{t('table.status', 'Status')}</th>
-                  <th className="px-3 sm:px-4 py-3 font-semibold text-right">{t('table.actions', 'Actions')}</th>
+                  <th className="px-2.5 sm:px-4 py-3 font-semibold">{t('admin.col_user', 'User')}</th>
+                  <th className="px-2.5 sm:px-4 py-3 font-semibold">{t('admin.col_phone', 'Verified Phone')}</th>
+                  <th className="px-2.5 sm:px-4 py-3 font-semibold">{t('admin.col_fayda', 'Fayda e-ID (Masked)')}</th>
+                  <th className="px-2.5 sm:px-4 py-3 font-semibold">{t('admin.col_business', 'Business Entity')}</th>
+                  <th className="px-2.5 sm:px-4 py-3 font-semibold">{t('admin.col_role', 'Assigned Role')}</th>
+                  <th className="px-2.5 sm:px-4 py-3 font-semibold">{t('table.status', 'Status')}</th>
+                  <th className="px-2.5 sm:px-4 py-3 font-semibold text-right">{t('table.actions', 'Actions')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">

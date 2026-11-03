@@ -450,7 +450,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({ onNavi
             </div>
 
             <div className="overflow-x-auto rounded-xl border border-slate-800/80 scrollbar-thin">
-              <table className="w-full text-left text-xs min-w-[760px]">
+              <table className="w-full text-left text-xs min-w-[680px] sm:min-w-[720px] lg:min-w-full">
                 <thead className="text-[11px] uppercase tracking-wider text-slate-400 bg-slate-950/40 border-b border-slate-800">
                   <tr>
                     <th className="px-3.5 py-3 font-semibold whitespace-nowrap">{t('system.timestamp')}</th>

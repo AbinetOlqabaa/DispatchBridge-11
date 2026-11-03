@@ -1116,6 +1116,16 @@ async function runTestSuite() {
     
     const adminPageCode = fs.readFileSync('src/pages/dashboards/SuperAdminDashboard.tsx', 'utf8');
     assert(adminPageCode.includes('min-w-[700px] sm:min-w-[740px] lg:min-w-full'), 'Super Admin users table has bounded responsive min-width');
+
+    const dispatchListPageCode = fs.readFileSync('src/pages/dispatches/DispatchListPage.tsx', 'utf8');
+    assert(dispatchListPageCode.includes('min-w-[720px] sm:min-w-[760px] lg:min-w-full'), 'Dispatch list page table has bounded responsive min-width');
+
+    const swCode = fs.readFileSync('public/sw.js', 'utf8');
+    assert(swCode.includes('STATIC_CACHE') && swCode.includes('API_CACHE'), 'Service worker configures static and API cache stores');
+    assert(swCode.includes('dispatchbridge-static-v2'), 'Service worker has static asset precache');
+
+    const manifestCode = fs.readFileSync('public/manifest.webmanifest', 'utf8');
+    assert(manifestCode.includes('"orientation": "any"'), 'Web App Manifest permits any orientation (tablet landscape + portrait)');
   });
 
   // -------------------------------------------------------------------------
@@ -1619,16 +1629,24 @@ async function runTestSuite() {
     }
   });
 
-  await test('Localization & Internationalization', 'Dictionary Parity Across All 5 Languages (Zero Missing Keys)', () => {
+  await test('Localization & Internationalization', 'Dictionary Parity Across All 5 Languages (Zero Missing Keys & Bidirectional Parity)', () => {
     const enKeys = Object.keys(translations.en);
-    assert(enKeys.length >= 100, `English dictionary contains comprehensive translation keys (found ${enKeys.length})`);
+    assertEqual(enKeys.length, 1162, `English dictionary contains exact expected count of 1,162 translation keys`);
 
     const targetLanguages: SupportedLanguage[] = ['am', 'om', 'ti', 'so'];
     for (const lang of targetLanguages) {
       const dict = translations[lang];
       assert(Boolean(dict), `Dictionary for language '${lang}' exists`);
 
+      const targetKeys = Object.keys(dict);
+      assertEqual(
+        targetKeys.length,
+        enKeys.length,
+        `Language '${lang}' key count (${targetKeys.length}) matches English baseline (${enKeys.length})`
+      );
+
       const missingKeys: string[] = [];
+      const extraKeys: string[] = [];
       const emptyKeys: string[] = [];
 
       for (const key of enKeys) {
@@ -1639,10 +1657,21 @@ async function runTestSuite() {
         }
       }
 
+      for (const key of targetKeys) {
+        if (!(key in translations.en)) {
+          extraKeys.push(key);
+        }
+      }
+
       assertEqual(
         missingKeys.length,
         0,
         `Language '${lang}' missing keys: [${missingKeys.slice(0, 10).join(', ')}${missingKeys.length > 10 ? '...' : ''}]`
+      );
+      assertEqual(
+        extraKeys.length,
+        0,
+        `Language '${lang}' has unknown extra keys: [${extraKeys.slice(0, 10).join(', ')}${extraKeys.length > 10 ? '...' : ''}]`
       );
       assertEqual(
         emptyKeys.length,

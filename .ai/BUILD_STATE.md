@@ -1,6 +1,6 @@
 # Build State — Business Dispatch & Delivery Reconciliation (DispatchBridge)
 
-- **Last Updated:** 2026-11-01T16:30:00-08:00
+- **Last Updated:** 2026-11-01T16:45:00-08:00
 - **Runtime / Platform:** Node.js v22.14.0 on Linux container with Express 4 backend & Vite 8 React 19 Frontend. Configured as an installable mobile-first Progressive Web App (PWA). *Note: Native Android build tooling (Gradle / Android SDK) is not supported in this runtime environment.*
 - **Stack:**
   - Backend: Node.js, Express 4, TypeScript, HMAC SHA-256 session tokens, timing-safe one-time bootstrap tokens, Fayda e-ID verification adapter, OTP gateway adapter, in-memory domain adapter (`sandboxStore`) with full multi-tenant isolation.
@@ -24,7 +24,7 @@
 | Phase 9 | `.ai/09_RELEASE_CHECKLIST.md` | **COMPLETE** | Release checklist evaluated honestly. Verdict: **READY FOR STAGING**. |
 | Identity Update | `.ai/IDENTITY_UPDATE_EXECUTE.md` | **COMPLETE** | Fayda e-ID national ID adapter (FAN/FIN masking, simulation badge, production fail-closed), mobile-first E.164 auth, cryptographic 6-digit OTP challenges, password reset/change step-up, user profile photo upload, and `/api/admin/users` governance with suspension audit logs. |
 | Extension & Governance | `.ai/00_MASTER_PLAN.md` | **COMPLETE** | Team directory & cryptographic invitation tokens (`/api/memberships`, `TeamPage.tsx`), Executive Performance & Reconciliation Reports (`/api/reports/analytics`, `ReportsPage.tsx`), User Profile & Credentials manager (`ProfilePage.tsx`), Multi-Tenant Context Switcher. |
-| Localization & i18n | `.ai/00_MASTER_PLAN.md` | **COMPLETE** | Comprehensive end-to-end multi-language translation across all 5 national languages (English, Amharic, Afan Oromo, Tigrinya, Somali). 100% dictionary key parity (1,280+ keys/language, 6,440 lines), zero missing keys, parameter interpolation, `DYNAMIC_SEED_MAP` resolution for all server-seeded business/partner/cargo/map/audit records, charts, tables, partner manifests, and external recipient native language switcher. |
+| Localization & i18n | `.ai/00_MASTER_PLAN.md` | **COMPLETE** | Comprehensive end-to-end multi-language translation across all 5 national languages (English, Amharic, Afan Oromo, Tigrinya, Somali). 100% dictionary bidirectional parity (exactly 1,162 keys/language, 6,445 lines), zero missing keys, parameter placeholder consistency (80 parameterized strings), `DYNAMIC_SEED_MAP` resolution for all server-seeded business/partner/cargo/map/audit records, charts, tables, partner manifests, and external recipient native language switcher. |
 
 ---
 
@@ -172,29 +172,33 @@ $ npm test
 ---
 
 ## 5. Work Completed in This Session & Acceptance Evidence
-- **Tablet Landscape Metric Cards Grid Alignment (`src/components/dispatches/DispatchSummaryCards.tsx`)**:
-  - Identified layout defect where Card 3 ("Completed Today") was forced to stretch across full-width as `col-span-2` on 1024x768 tablet landscape due to `md:landscape:grid-cols-2 xl:grid-cols-3`.
-  - Replaced breakpoint class with `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4` and Card 3 span `sm:col-span-2 lg:col-span-1`.
-  - Result: On tablet landscape (1024x768) and desktop (1440x900), all 3 metric cards cleanly align in 3 equal-width columns.
-- **Tablet Portrait Table Padding & Density (`src/pages/dispatches/DispatchDetailPage.tsx` & `src/pages/audit/AuditPage.tsx`)**:
-  - `src/pages/dispatches/DispatchDetailPage.tsx`: Adjusted items table min-width to `min-w-[680px] sm:min-w-[720px] lg:min-w-full` with responsive cell padding `px-2.5 sm:px-3.5 py-3`.
-  - `src/pages/audit/AuditPage.tsx`: Adjusted audit table min-width to `min-w-[720px] sm:min-w-[760px] lg:min-w-full` with responsive cell padding `px-2.5 sm:px-3.5 py-3`.
-  - Result: Columns fit tightly and cleanly on 768px tablet portrait with zero clipped text and smooth internal horizontal scroll containment.
+- **PWA Offline Service Worker & Orientation Infrastructure (`public/sw.js`, `src/main.tsx`, `public/manifest.webmanifest`, `public/manifest.json`)**:
+  - Implemented advanced Service Worker (`public/sw.js`) with two-tier caching:
+    - Precached static app shell assets (`/`, `/index.html`, `/manifest.webmanifest`, `/manifest.json`, `/icons/icon-192.svg`, `/icons/icon-512.svg`).
+    - Configured Network-First caching strategy for read-only `/api/` endpoints (`/api/dispatches`, `/api/locations`, `/api/partners`, `/api/system/status`) with automatic offline cache fallback, allowing manifests and waybills to remain accessible when carrier network drops.
+    - Stale-While-Revalidate caching for static scripts, styles, SVGs, and fonts.
+    - Registered the Service Worker in `src/main.tsx` on `window.load` event (verified in browser console: `[PWA] Service Worker registered with scope: http://localhost:3000/`).
+  - Updated both `manifest.webmanifest` and `manifest.json` orientation from locked `portrait-primary` to `"orientation": "any"`, allowing tablets to freely rotate between portrait and landscape.
+- **Tablet Table Responsiveness Refinements (`src/pages/dispatches/DispatchListPage.tsx` & `src/pages/dashboards/SuperAdminDashboard.tsx`)**:
+  - `src/pages/dispatches/DispatchListPage.tsx`: Replaced rigid `min-w-[860px]` with responsive `min-w-[720px] sm:min-w-[760px] lg:min-w-full` with compact cell padding, ensuring columns fit cleanly on 768px portrait tablets without premature horizontal scrolling.
+  - `src/pages/dashboards/SuperAdminDashboard.tsx`: Replaced rigid `min-w-[760px]` with responsive `min-w-[680px] sm:min-w-[720px] lg:min-w-full`.
+- **Localization & Multi-Language Translation System Parity (`src/i18n/translations.ts` & `test/runTests.ts`)**:
+  - Maintained 100% dictionary bidirectional parity across all 5 national languages (English, Amharic, Afaan Oromoo, Tigrinya, Somali) with exactly 1,162 unique keys in each language and zero missing keys.
 - **Automated Viewport & Layout Verification (`playwright-cli`)**:
-  - Verified rendered layouts via headless Chromium across all required viewports with 0 page-level horizontal overflow:
-    - Mobile portrait: `390x844` (no overflow)
-    - Tablet portrait: `768x1024` (no overflow)
-    - Tablet portrait (iPad Air/Pro): `820x1180` (no overflow)
-    - Tablet landscape: `1024x768` (no overflow, dedicated `TabletSidebar`)
-    - Tablet landscape (iPad Pro): `1180x820` (no overflow, dedicated `TabletSidebar`)
-    - Desktop: `1440x900` (no overflow)
+  - Verified rendered layouts via headless Chromium across all required viewports with 0 page-level horizontal overflow (`scrollWidth === innerWidth`):
+    - Mobile portrait: `390x844` (`overflow: false`)
+    - Tablet portrait: `768x1024` (`overflow: false`, balanced 2-column wrapping, horizontal tablet nav strip)
+    - Tablet portrait (iPad Air/Pro): `820x1180` (`overflow: false`)
+    - Tablet landscape: `1024x768` (`overflow: false`, dedicated `TabletSidebar`, 3-column metric cards)
+    - Tablet landscape (iPad Pro): `1180x820` (`overflow: false`)
+    - Desktop: `1440x900` (`overflow: false`)
 - **Automated Acceptance & Quality Gate Verification**:
-  - `npm test`: **44/44 tests passed with 0 failures** (`tsx test/runTests.ts`).
+  - `npm test`: **45/45 tests passed with 0 failures** (`tsx test/runTests.ts`).
   - `npm run lint`: **0 errors** (`tsc --noEmit`).
   - `compile_applet`: **SUCCESS**.
 
 ---
 
 ## 6. Next Recommended Actions
-1. **Production Infrastructure Transition**: When deploying to production environments, configure persistent PostgreSQL / Cloud SQL via Drizzle ORM or Firestore using the platform's provisioning skills.
+1. **Production Infrastructure Transition**: When deploying to production environments, configure persistent PostgreSQL / Cloud SQL via Drizzle ORM or Firestore using the platform's provisioning skills (`cloudsql-setup` or `firebase-integration-rpc`).
 2. **External Gateway Credentials**: Configure SMS / WhatsApp webhook credentials in the platform's secure secrets store for live external carrier notifications and SMS OTP delivery.

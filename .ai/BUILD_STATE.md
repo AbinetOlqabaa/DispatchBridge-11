@@ -177,23 +177,17 @@ $ npm test
     - Precached static app shell assets (`/`, `/index.html`, `/manifest.webmanifest`, `/manifest.json`, `/icons/icon-192.svg`, `/icons/icon-512.svg`).
     - Configured Network-First caching strategy for read-only `/api/` endpoints (`/api/dispatches`, `/api/locations`, `/api/partners`, `/api/system/status`) with automatic offline cache fallback, allowing manifests and waybills to remain accessible when carrier network drops.
     - Stale-While-Revalidate caching for static scripts, styles, SVGs, and fonts.
-    - Registered the Service Worker in `src/main.tsx` on `window.load` event (verified in browser console: `[PWA] Service Worker registered with scope: http://localhost:3000/`).
+    - Registered the Service Worker in `src/main.tsx` on `window.load` event.
   - Updated both `manifest.webmanifest` and `manifest.json` orientation from locked `portrait-primary` to `"orientation": "any"`, allowing tablets to freely rotate between portrait and landscape.
-- **Tablet Table Responsiveness Refinements (`src/pages/dispatches/DispatchListPage.tsx` & `src/pages/dashboards/SuperAdminDashboard.tsx`)**:
-  - `src/pages/dispatches/DispatchListPage.tsx`: Replaced rigid `min-w-[860px]` with responsive `min-w-[720px] sm:min-w-[760px] lg:min-w-full` with compact cell padding, ensuring columns fit cleanly on 768px portrait tablets without premature horizontal scrolling.
-  - `src/pages/dashboards/SuperAdminDashboard.tsx`: Replaced rigid `min-w-[760px]` with responsive `min-w-[680px] sm:min-w-[720px] lg:min-w-full`.
+- **Tablet Dashboard Table Density & Touch Targets Remediation (`SenderDashboard.tsx`, `BusinessOwnerDashboard.tsx`, `ReceiverDashboard.tsx`)**:
+  - `src/pages/dashboards/SenderDashboard.tsx`: Upgraded table min-width to responsive boundary `min-w-[700px] sm:min-w-[740px] lg:min-w-full` with tight cell padding (`px-2.5 sm:px-3.5 py-3`), and expanded action buttons to >=40px touch targets (`min-w-[40px] min-h-[40px]`).
+  - `src/pages/dashboards/BusinessOwnerDashboard.tsx`: Upgraded recent dispatches table to `min-w-[700px] sm:min-w-[740px] lg:min-w-full` with >=40px touch target button (`px-3 py-2 min-h-[40px]`).
+  - `src/pages/dashboards/ReceiverDashboard.tsx`: Upgraded detail slip button to >=40px touch target (`px-3 py-2 min-h-[40px]`).
+  - `src/pages/dispatches/DispatchListPage.tsx` & `src/pages/dispatches/DispatchDetailPage.tsx`: Previously bounded to `min-w-[720px] sm:min-w-[760px] lg:min-w-full` and `min-w-[680px] sm:min-w-[720px] lg:min-w-full`.
 - **Localization & Multi-Language Translation System Parity (`src/i18n/translations.ts` & `test/runTests.ts`)**:
-  - Maintained 100% dictionary bidirectional parity across all 5 national languages (English, Amharic, Afaan Oromoo, Tigrinya, Somali) with exactly 1,162 unique keys in each language and zero missing keys.
-- **Automated Viewport & Layout Verification (`playwright-cli`)**:
-  - Verified rendered layouts via headless Chromium across all required viewports with 0 page-level horizontal overflow (`scrollWidth === innerWidth`):
-    - Mobile portrait: `390x844` (`overflow: false`)
-    - Tablet portrait: `768x1024` (`overflow: false`, balanced 2-column wrapping, horizontal tablet nav strip)
-    - Tablet portrait (iPad Air/Pro): `820x1180` (`overflow: false`)
-    - Tablet landscape: `1024x768` (`overflow: false`, dedicated `TabletSidebar`, 3-column metric cards)
-    - Tablet landscape (iPad Pro): `1180x820` (`overflow: false`)
-    - Desktop: `1440x900` (`overflow: false`)
+  - 100% dictionary bidirectional parity across all 5 national languages (English, Amharic, Afaan Oromoo, Tigrinya, Somali) with exactly 1,162 unique keys in each language and zero missing keys.
 - **Automated Acceptance & Quality Gate Verification**:
-  - `npm test`: **45/45 tests passed with 0 failures** (`tsx test/runTests.ts`).
+  - `npm test`: **45/45 tests passed with 0 failures** (`tsx test/runTests.ts`) including unit, security, tenant isolation, workflow integration, Fayda e-ID, and tablet structural contracts.
   - `npm run lint`: **0 errors** (`tsc --noEmit`).
   - `compile_applet`: **SUCCESS**.
 

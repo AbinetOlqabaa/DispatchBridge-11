@@ -1120,6 +1120,12 @@ async function runTestSuite() {
     const dispatchListPageCode = fs.readFileSync('src/pages/dispatches/DispatchListPage.tsx', 'utf8');
     assert(dispatchListPageCode.includes('min-w-[720px] sm:min-w-[760px] lg:min-w-full'), 'Dispatch list page table has bounded responsive min-width');
 
+    const senderDashboardCode = fs.readFileSync('src/pages/dashboards/SenderDashboard.tsx', 'utf8');
+    assert(senderDashboardCode.includes('min-w-[700px] sm:min-w-[740px] lg:min-w-full'), 'Sender dashboard table has bounded responsive min-width');
+
+    const ownerDashboardCode = fs.readFileSync('src/pages/dashboards/BusinessOwnerDashboard.tsx', 'utf8');
+    assert(ownerDashboardCode.includes('min-w-[700px] sm:min-w-[740px] lg:min-w-full'), 'Business owner dashboard table has bounded responsive min-width');
+
     const swCode = fs.readFileSync('public/sw.js', 'utf8');
     assert(swCode.includes('STATIC_CACHE') && swCode.includes('API_CACHE'), 'Service worker configures static and API cache stores');
     assert(swCode.includes('dispatchbridge-static-v2'), 'Service worker has static asset precache');
